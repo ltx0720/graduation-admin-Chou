@@ -5,3 +5,8 @@
 
 ## 认证授权服务
 
+```sequenceDiagram
+participant 客户端
+participant 认证授权服务器
+participant 数据库
+```
