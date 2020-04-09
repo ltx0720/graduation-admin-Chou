@@ -1,0 +1,5 @@
+rootProject.name = 'graduation-admin-Chou'
+
+include 'authorization'
+include 'file-server'
+include 'service'
