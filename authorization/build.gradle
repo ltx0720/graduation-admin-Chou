@@ -11,9 +11,6 @@ configurations {
     }
 }
 
-repositories {
-    mavenCentral()
-}
 
 dependencies {
 }

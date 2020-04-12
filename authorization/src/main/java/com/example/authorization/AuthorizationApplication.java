@@ -5,9 +5,25 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class AuthorizationApplication {
+    public static void main(String[] args) throws Exception {
 
-    public static void main(String[] args) {
+
         SpringApplication.run(AuthorizationApplication.class, args);
-    }
 
+
+//        Person person = new Person(1    , "1");
+//        String jsonString = JSONObject.toJSONString(person);
+//        System.out.println(jsonString);
+//
+////        System.out.println(s);
+//
+//        Person p = JSONObject.parseObject(jsonString, Person.class);
+//
+//        System.out.println(p);
+//
+//        Map<String, Object> keyMap = RSAUtils.genKeyPair();
+//        Object publikey = keyMap.get("RSAPublicKey");
+//        System.out.println(publikey.toString());
+
+    }
 }
