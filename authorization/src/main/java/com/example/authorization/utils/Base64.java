@@ -14,7 +14,7 @@ public class Base64 {
         return decoder.decode(base64.getBytes());
     }
 
-    public static String encode(byte[] bytes) throws Exception {
+    public static String encode(byte[] bytes) {
         return new String(encoder.encode(bytes));
     }
 //

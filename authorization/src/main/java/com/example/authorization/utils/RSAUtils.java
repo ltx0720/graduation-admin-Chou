@@ -24,7 +24,7 @@ import java.security.spec.X509EncodedKeySpec;
 public class RSAUtils {
     // 私钥解密
     public static String decryptByPrivateKey(String str, String privateKey) {
-        System.out.println(privateKey);
+//        System.out.println(privateKey);
 
         // 64位解码加密后的字符串
         byte[] inputByte = Base64.decode(str);
@@ -61,7 +61,7 @@ public class RSAUtils {
 
     // 公钥加密
     public static String encryptByPublicKey(String str, String publicKey) throws Exception{
-        System.out.println(publicKey);
+//        System.out.println(publicKey);
         //base64编码的公钥
         byte[] decoded = Base64.decode(publicKey);
         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));

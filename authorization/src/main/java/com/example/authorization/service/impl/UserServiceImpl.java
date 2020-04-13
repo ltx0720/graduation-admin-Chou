@@ -17,9 +17,7 @@ public class UserServiceImpl implements UserService {
     private UserDao dao;
 
     @Override
-    public boolean validate(User user) {
-        int result = dao.findUser(user);
-
-        return result == 1;
+    public User validate(String username, String password) {
+        return dao.findUser(username, password);
     }
 }

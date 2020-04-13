@@ -14,7 +14,7 @@ configurations {
 
 dependencies {
 }
-
+//apply plugin: "io.franzbecker.gradle-lombok"  //再次应用插件 只需这两行即可实现lombok的功能
 test {
     useJUnitPlatform()
 }

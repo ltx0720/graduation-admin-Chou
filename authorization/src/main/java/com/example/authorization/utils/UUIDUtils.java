@@ -7,7 +7,6 @@ import java.util.UUID;
  * @Date 15:00 2020/4/12
  */
 public class UUIDUtils {
-
     public static String getUUID() {
         return UUID.randomUUID().toString();
     }

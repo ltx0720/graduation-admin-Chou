@@ -2,9 +2,7 @@ package com.example.authorization.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.example.authorization.pojo.Person;
 import com.example.authorization.pojo.Result;
-import com.example.authorization.pojo.Token;
 import com.example.authorization.pojo.User;
 import com.example.authorization.service.UserService;
 import com.example.authorization.utils.Base64;
@@ -13,7 +11,6 @@ import com.example.authorization.utils.RSAUtils;
 import com.example.authorization.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,66 +29,73 @@ import java.util.Map;
 @RequestMapping("/identify")
 public class LoginController {
 
-    @Value("${publickey}")
-    private String PUBLIC_KEY;
-    @Value("${privatekey}")
-    private String PRIVATE_KEY;
+    private static String publicKey;
+    private String privateKey;
     @Autowired
     private UserService userService;
 
-//    @RequestMapping("/token")
-//    public String getToken(){
-//        return "";
-//    }
 
     @RequestMapping(value = "/publickey", method = RequestMethod.GET)
     public String getKey() throws Exception {
-        return PUBLIC_KEY;
+        return publicKey;
     }
 
-    @RequestMapping(value = "/tologin", method = RequestMethod.POST)
+    @RequestMapping(value = "/token", method = RequestMethod.POST)
     public String tologin(HttpServletRequest request) {
         String detail = request.getParameter("detail");
         Map<String, Object> map = getRequestResult(detail);
 
+        // 校验签名
         boolean signIsLegal = validateSign(map);
         if (!signIsLegal){
             // 后续 --> 枚举
             return new Result(400, "签名校验错误").toString();
         }
 
-        boolean isExist = validateUser((User) map.get("user"));
-        if (!isExist){
+        // 校验密码
+        User user = validateAndgetUser((String) map.get("username"), (String)map.get("password"));
+        if (user == null){
             return new Result(400, "用户名或密码错误").toString();
         }
 
         // 生成token
-        Token token = TokenUtils.generateToken();
+        String token = TokenUtils.generateToken(user);
 
         return new Result(200, token).toString();
     }
 
+    // 把请求中的信息解密
     private Map<String, Object> getRequestResult(String data){
-        // Base64解码
         String decode = new String(Base64.decode(data));
-        // 私钥解密
-        String decrypt = RSAUtils.decryptByPrivateKey(decode, PRIVATE_KEY);
+        String decrypt = RSAUtils.decryptByPrivateKey(decode, privateKey);
         Map<String, Object> map = JSON.parseObject(decrypt, Map.class);
 
         return map;
     }
 
     // 校验用户名密码
-    private boolean validateUser(User user){
-        return userService.validate(user);
+    private User validateAndgetUser(String username, String password){
+        return userService.validate(username, password);
     }
 
     // 验签
     private boolean validateSign(Map<String, Object> map){
-        User user = (User) map.get("user");
         String salt = (String)map.get("salt");
         String sign = (String)map.get("sign");
+        map.remove("sign");
 
-        return MD5.validateSign(user.toString(), salt, sign);
+        String json = JSONObject.toJSONString(map);
+
+        return MD5.validateSign(json, salt, sign);
+    }
+
+    @Value("${rsa.privatekey}")
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    @Value("${rsa.publickey}")
+    public static void setPublicKey(String publicKey) {
+        LoginController.publicKey = publicKey;
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
 
-    boolean validate(User user);
+    User validate(String username, String password);
 
 //    void validate(User user);
 }

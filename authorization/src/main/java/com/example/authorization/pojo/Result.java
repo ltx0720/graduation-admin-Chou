@@ -1,6 +1,7 @@
 package com.example.authorization.pojo;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.Data;
 
 /**
  * @Author ltx
@@ -8,6 +9,7 @@ import com.alibaba.fastjson.JSONObject;
  *
  * 统一结果对象
  */
+@Data
 public class Result {
     public int code;
     public Object data;
@@ -31,38 +33,5 @@ public class Result {
         this.code = code;
         this.data = "";
         this.reason = reason;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    @Override
-    public String toString() {
-        return "Result{" +
-                "code=" + code +
-                ", data='" + data + '\'' +
-                ", reason='" + reason + '\'' +
-                '}';
     }
 }
