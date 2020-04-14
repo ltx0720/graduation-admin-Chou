@@ -1,18 +1,12 @@
 package com.example.authorization.utils;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.example.authorization.exception.RSAException.RSAException;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.security.InvalidKeyException;
 import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
@@ -23,52 +17,44 @@ import java.security.spec.X509EncodedKeySpec;
 @Component
 public class RSAUtils {
     // 私钥解密
-    public static String decryptByPrivateKey(String str, String privateKey) {
-//        System.out.println(privateKey);
-
-        // 64位解码加密后的字符串
+    public static String decryptByPrivateKey(String str, String privateKey) throws RSAException {
+        // 先 Base64 解码
         byte[] inputByte = Base64.decode(str);
-
-        // base64编码的私钥
-        byte[] decoded = Base64.decode(privateKey);
+        byte[] key = Base64.decode(privateKey);
         RSAPrivateKey priKey = null;
-        String outStr = "";
+        String result = "";
+
         try {
-            priKey = (RSAPrivateKey) KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(decoded));
+            priKey = (RSAPrivateKey) KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(key));
             // RSA解密
             Cipher cipher = Cipher.getInstance("RSA");
             cipher.init(Cipher.DECRYPT_MODE, priKey);
-
-            outStr = new String(cipher.doFinal(inputByte));
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
+            result = new String(cipher.doFinal(inputByte));
+        } catch (Exception e) {
+            throw new RSAException("解密出错");
         }
 
-
-        return outStr;
+        return result;
     }
 
 
     // 公钥加密
-    public static String encryptByPublicKey(String str, String publicKey) throws Exception{
-//        System.out.println(publicKey);
+    public static String encryptByPublicKey(String str, String publicKey) throws RSAException {
         //base64编码的公钥
         byte[] decoded = Base64.decode(publicKey);
-        RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
-        //RSA加密
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.ENCRYPT_MODE, pubKey);
-        String outStr = Base64.encode(cipher.doFinal(str.getBytes("UTF-8")));
-        return outStr;
+        RSAPublicKey pubKey = null;
+        Cipher cipher = null;
+        String result = "";
+
+        try {
+            pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+            cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, pubKey);
+            result = Base64.encode(cipher.doFinal(str.getBytes("UTF-8")));
+        } catch (Exception e) {
+            throw new RSAException("加密出错");
+        }
+
+        return result;
     }
 }

@@ -1,11 +1,14 @@
 package com.example.authorization.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.authorization.pojo.Token;
+import com.example.authorization.pojo.TokenDetail;
 import com.example.authorization.pojo.User;
+import com.example.authorization.service.TokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 /**
@@ -17,20 +20,32 @@ public class TokenUtils {
 
     private static String salt;
     private static String algorithm;
+    private static long token_alive;
+    @Autowired
+    private static TokenService service;
+
 
     /**
      * 生成 token
      * @param user 想要在载荷中返回的 User 信息
      * @return token
      */
-    public static String generateToken(User user){
+    public static String generateToken(User user) {
         String header = getHeader();
-        String playload = getPlayload(user);
-        String data = header + "." + playload;
+        TokenDetail detail = new TokenDetail(Calendar.getInstance().getTimeInMillis(), token_alive);
 
+        String playload = getPlayload(user, detail);
+        String data = header + "." + playload;
         String sign = getSign(data);
 
-        return data + "." + sign;
+        String token = data + "." + sign;
+        boolean result = service.writeToken(detail, token);
+
+        if (!result){
+            return null;
+        }
+
+        return token;
     }
 
     private static String getHeader(){
@@ -43,9 +58,9 @@ public class TokenUtils {
         return Base64.encode(json.getBytes());
     }
 
-    private static String getPlayload(User user){
+    private static String getPlayload(User user, TokenDetail detail){
         HashMap<String, Object> map = new HashMap<>(2);
-        map.put("token", new Token());
+        map.put("token", detail);
         map.put("user", user);
         String json = JSONObject.toJSONString(map);
 
@@ -68,7 +83,14 @@ public class TokenUtils {
     }
 
     @Value("${token.algorithm}")
-    public static void setAlgorithm(String algorithm) {
+    public void setAlgorithm(String algorithm) {
         TokenUtils.algorithm = algorithm;
     }
+
+
+    @Value("${token.alive}")
+    public void setToken_alive(long token_alive) {
+        TokenUtils.token_alive = token_alive;
+    }
+
 }

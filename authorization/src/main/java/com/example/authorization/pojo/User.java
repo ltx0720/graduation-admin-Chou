@@ -5,6 +5,8 @@ import lombok.Data;
 /**
  * @Author ltx
  * @Date 21:53 2020/4/12
+ *
+ * 用户
  */
 @Data
 public class User {

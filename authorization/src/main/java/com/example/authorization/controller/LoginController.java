@@ -2,6 +2,7 @@ package com.example.authorization.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.example.authorization.exception.RSAException.RSAException;
 import com.example.authorization.pojo.Result;
 import com.example.authorization.pojo.User;
 import com.example.authorization.service.UserService;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
-
 
 /**
  * @Author ltx
@@ -36,41 +36,41 @@ public class LoginController {
 
 
     @RequestMapping(value = "/publickey", method = RequestMethod.GET)
-    public String getKey() throws Exception {
+    public String getKey() {
         return publicKey;
     }
 
     @RequestMapping(value = "/token", method = RequestMethod.POST)
-    public String tologin(HttpServletRequest request) {
+    public Result tologin(HttpServletRequest request) {
         String detail = request.getParameter("detail");
         Map<String, Object> map = getRequestResult(detail);
 
         // 校验签名
         boolean signIsLegal = validateSign(map);
-        if (!signIsLegal){
-            // 后续 --> 枚举
-            return new Result(400, "签名校验错误").toString();
-        }
+        if (!signIsLegal) return Result.login_error();
 
         // 校验密码
         User user = validateAndgetUser((String) map.get("username"), (String)map.get("password"));
-        if (user == null){
-            return new Result(400, "用户名或密码错误").toString();
-        }
+        if (user == null) return Result.login_error();
 
         // 生成token
         String token = TokenUtils.generateToken(user);
+        if (token == null) return Result.error();
 
-        return new Result(200, token).toString();
+        return Result.success(token);
     }
 
     // 把请求中的信息解密
     private Map<String, Object> getRequestResult(String data){
         String decode = new String(Base64.decode(data));
-        String decrypt = RSAUtils.decryptByPrivateKey(decode, privateKey);
-        Map<String, Object> map = JSON.parseObject(decrypt, Map.class);
+        String decrypt = null;
+        try {
+            decrypt = RSAUtils.decryptByPrivateKey(decode, privateKey);
+        } catch (RSAException e) {
+            e.printStackTrace();
+        }
 
-        return map;
+        return JSON.parseObject(decrypt, Map.class);
     }
 
     // 校验用户名密码
