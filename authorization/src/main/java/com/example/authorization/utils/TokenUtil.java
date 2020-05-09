@@ -32,9 +32,10 @@ public class TokenUtils {
      */
     public static String generateToken(User user) {
         String header = getHeader();
-        TokenDetail detail = new TokenDetail(Calendar.getInstance().getTimeInMillis(), token_alive);
 
+        TokenDetail detail = new TokenDetail(Calendar.getInstance().getTimeInMillis(), token_alive);
         String playload = getPlayload(user, detail);
+
         String data = header + "." + playload;
         String sign = getSign(data);
 
