@@ -1,0 +1,22 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+}
+
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+dependencies {
+//    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.2.6.RELEASE'
+//    compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '2.2.6.RELEASE'
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+
+}
+//test {
+//    useJUnitPlatform()
+//}
