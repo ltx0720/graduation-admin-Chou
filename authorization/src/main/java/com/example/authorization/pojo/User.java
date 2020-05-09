@@ -10,9 +10,11 @@ import lombok.Data;
  */
 @Data
 public class User {
-   private String username;
-   private String name;
+   private byte role;
    private int school_id;
    private int department_id;
-   private int group_id;
+   private long number;
+   private String name;
+   private String phone;
+   private String mail;
 }

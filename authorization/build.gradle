@@ -11,7 +11,6 @@ configurations {
     }
 }
 
-
 dependencies {
 }
 test {

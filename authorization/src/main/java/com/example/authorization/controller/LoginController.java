@@ -1,15 +1,11 @@
 package com.example.authorization.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.example.authorization.exception.RSAException.RSAException;
 import com.example.authorization.pojo.Result;
 import com.example.authorization.pojo.User;
 import com.example.authorization.service.UserService;
-import com.example.authorization.utils.Base64;
-import com.example.authorization.utils.MD5;
-import com.example.authorization.utils.RSAUtils;
-import com.example.authorization.utils.TokenUtils;
+import com.example.authorization.utils.*;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,33 +31,41 @@ public class LoginController {
     private UserService userService;
 
 
+    /**
+     * 获取公钥
+     * @return String 公钥
+     */
     @RequestMapping(value = "/publickey", method = RequestMethod.GET)
     public String getKey() {
         return publicKey;
     }
 
+    /**
+     * 请求获取 token
+     */
     @RequestMapping(value = "/token", method = RequestMethod.POST)
     public Result tologin(HttpServletRequest request) {
         String detail = request.getParameter("detail");
-        Map<String, Object> map = getRequestResult(detail);
 
-        // 校验签名
-        boolean signIsLegal = validateSign(map);
-        if (!signIsLegal) return Result.login_error();
+        // 私钥解密
+        Map<String, Object> map = getRequestResult(detail);
 
         // 校验密码
         User user = validateAndgetUser((String) map.get("username"), (String)map.get("password"));
         if (user == null) return Result.login_error();
 
         // 生成token
-        String token = TokenUtils.generateToken(user);
+        String token = TokenUtil.generateToken(user);
         if (token == null) return Result.error();
 
         return Result.success(token);
     }
 
-    // 把请求中的信息解密
-    private Map<String, Object> getRequestResult(String data){
+
+    /**
+     * request 中的信息解密
+     */
+    private Map getRequestResult(String data){
         String decode = new String(Base64.decode(data));
         String decrypt = null;
         try {
@@ -70,24 +74,28 @@ public class LoginController {
             e.printStackTrace();
         }
 
-        return JSON.parseObject(decrypt, Map.class);
+        return GsonUtil.fromJson(decode, Map.class);
     }
 
-    // 校验用户名密码
+
+    /**
+     * 校验用户名密码
+     */
     private User validateAndgetUser(String username, String password){
         return userService.validate(username, password);
     }
 
     // 验签
-    private boolean validateSign(Map<String, Object> map){
-        String salt = (String)map.get("salt");
-        String sign = (String)map.get("sign");
-        map.remove("sign");
-
-        String json = JSONObject.toJSONString(map);
-
-        return MD5.validateSign(json, salt, sign);
-    }
+//    private boolean validateSign(Map<String, Object> map){
+//        String salt = (String)map.get("salt");
+//        String sign = (String)map.get("sign");
+//        map.remove("sign");
+//
+//        String json = GsonUtil.t(map, Map.class);
+//      JSONObject.toJSONString(map);
+//
+//        return MD5.validateSign(json, salt, sign);
+//    }
 
     @Value("${rsa.privatekey}")
     public void setPrivateKey(String privateKey) {

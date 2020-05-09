@@ -1,6 +1,5 @@
 package com.example.authorization.utils;
 
-import com.alibaba.fastjson.JSONObject;
 import com.example.authorization.pojo.TokenDetail;
 import com.example.authorization.pojo.User;
 import com.example.authorization.service.TokenService;
@@ -10,17 +9,18 @@ import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author ltx
  * @Date 23:46 2020/4/12
  */
 @Component
-public class TokenUtils {
+public class TokenUtil {
 
     private static String salt;
     private static String algorithm;
-    private static long token_alive;
+    private static long alive;
     @Autowired
     private static TokenService service;
 
@@ -31,41 +31,43 @@ public class TokenUtils {
      * @return token
      */
     public static String generateToken(User user) {
+        TokenDetail detail = new TokenDetail(Calendar.getInstance().getTimeInMillis(), alive);
+
         String header = getHeader();
-
-        TokenDetail detail = new TokenDetail(Calendar.getInstance().getTimeInMillis(), token_alive);
         String playload = getPlayload(user, detail);
-
         String data = header + "." + playload;
-        String sign = getSign(data);
+        String token = data + "." + getSign(data);
 
-        String token = data + "." + sign;
+        // token 写库
         boolean result = service.writeToken(detail, token);
 
-        if (!result){
-            return null;
-        }
+        if (!result) return null;
 
         return token;
     }
 
+    /**
+     * 生成 token 的 Header 部分
+     * @return String
+     */
     private static String getHeader(){
-        HashMap<String, String> map = new HashMap<>(2);
+        HashMap<String, Object> map = new HashMap<>(2);
         map.put("type", "JWT");
         map.put("algorithm", algorithm);
 
-        String json = JSONObject.toJSONString(map);
-
-        return Base64.encode(json.getBytes());
+        return Base64.encode(GsonUtil.toJson(map).getBytes());
     }
 
+    /**
+     * 生成 token 的 Playload 部分
+     * @return String
+     */
     private static String getPlayload(User user, TokenDetail detail){
-        HashMap<String, Object> map = new HashMap<>(2);
-        map.put("token", detail);
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("token_detail", detail);
         map.put("user", user);
-        String json = JSONObject.toJSONString(map);
 
-        return Base64.encode(json.getBytes());
+        return Base64.encode(GsonUtil.toJson(map).getBytes());
     }
 
     private static String getSign(String data){
@@ -80,18 +82,17 @@ public class TokenUtils {
 
     @Value("${token.salt}")
     public void setSalt(String salt) {
-        TokenUtils.salt = salt;
+        TokenUtil.salt = salt;
     }
 
     @Value("${token.algorithm}")
     public void setAlgorithm(String algorithm) {
-        TokenUtils.algorithm = algorithm;
+        TokenUtil.algorithm = algorithm;
     }
 
 
     @Value("${token.alive}")
-    public void setToken_alive(long token_alive) {
-        TokenUtils.token_alive = token_alive;
+    public void setAlive(long alive) {
+        TokenUtil.alive = alive;
     }
-
 }
