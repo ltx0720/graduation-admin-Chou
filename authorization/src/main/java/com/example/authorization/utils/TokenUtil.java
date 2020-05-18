@@ -21,17 +21,21 @@ public class TokenUtil {
     private static String salt;
     private static String algorithm;
     private static long alive;
-    @Autowired
     private static TokenService service;
 
+    @Autowired
+    public TokenUtil(TokenService service) {
+        TokenUtil.service = service;
+    }
 
     /**
      * 生成 token
+     *
      * @param user 想要在载荷中返回的 User 信息
      * @return token
      */
     public static String generateToken(User user) {
-        TokenDetail detail = new TokenDetail(Calendar.getInstance().getTimeInMillis(), alive);
+        TokenDetail detail = new TokenDetail(Calendar.getInstance().getTimeInMillis(), 123321l);
 
         String header = getHeader();
         String playload = getPlayload(user, detail);
@@ -40,7 +44,6 @@ public class TokenUtil {
 
         // token 写库
         boolean result = service.writeToken(detail, token);
-
         if (!result) return null;
 
         return token;
@@ -48,9 +51,10 @@ public class TokenUtil {
 
     /**
      * 生成 token 的 Header 部分
+     *
      * @return String
      */
-    private static String getHeader(){
+    private static String getHeader() {
         HashMap<String, Object> map = new HashMap<>(2);
         map.put("type", "JWT");
         map.put("algorithm", algorithm);
@@ -60,9 +64,10 @@ public class TokenUtil {
 
     /**
      * 生成 token 的 Playload 部分
+     *
      * @return String
      */
-    private static String getPlayload(User user, TokenDetail detail){
+    private static String getPlayload(User user, TokenDetail detail) {
         Map<String, Object> map = new HashMap<>(2);
         map.put("token_detail", detail);
         map.put("user", user);
@@ -70,10 +75,10 @@ public class TokenUtil {
         return Base64.encode(GsonUtil.toJson(map).getBytes());
     }
 
-    private static String getSign(String data){
+    private static String getSign(String data) {
         String sign = "";
         // 后续 --> 枚举
-        if ("md5".equals(algorithm)){
+        if ("md5".equals(algorithm)) {
             sign = MD5.encrypt(data, salt);
         }
 

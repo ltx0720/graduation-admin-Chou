@@ -6,6 +6,8 @@ import com.example.authorization.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 /**
  * @Author ltx
  * @Date 23:02 2020/4/12
@@ -18,6 +20,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User validate(String username, String password) {
-        return dao.findUser(username, password);
+
+        User user = dao.findUser(username, password);
+
+        System.out.println(user);
+        return user;
     }
 }

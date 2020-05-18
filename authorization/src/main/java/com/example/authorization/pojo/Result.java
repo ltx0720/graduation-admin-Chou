@@ -1,6 +1,5 @@
 package com.example.authorization.pojo;
 
-import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
 /**

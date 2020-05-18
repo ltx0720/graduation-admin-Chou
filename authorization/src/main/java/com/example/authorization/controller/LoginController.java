@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -48,7 +49,11 @@ public class LoginController {
         String detail = request.getParameter("detail");
 
         // 私钥解密
-        Map<String, Object> map = getRequestResult(detail);
+//        Map<String, Object> map = getRequestResult(detail);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("username", "user");
+        map.put("password", "123");
 
         // 校验密码
         User user = validateAndgetUser((String) map.get("username"), (String)map.get("password"));
@@ -66,7 +71,8 @@ public class LoginController {
      * request 中的信息解密
      */
     private Map getRequestResult(String data){
-        String decode = new String(Base64.decode(data));
+        String decode = data;
+//                String decode = new String(Base64.decode(data));
         String decrypt = null;
         try {
             decrypt = RSAUtils.decryptByPrivateKey(decode, privateKey);

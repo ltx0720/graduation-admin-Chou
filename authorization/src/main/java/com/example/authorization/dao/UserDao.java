@@ -2,8 +2,12 @@ package com.example.authorization.dao;
 
 import com.example.authorization.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.mapping.StatementType;
+
+import java.util.Map;
 
 /**
  * @Author ltx
@@ -12,6 +16,8 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface UserDao {
 
-    @Select("select * from user where username=#{username} and password={password}")
+    @Select("select * from user " +
+            "where username = #{username} and password = MD5(concat(left(#{password}, 5), #{password}, right(#{username}, 2)))")
+    @Options(statementType= StatementType.CALLABLE)
     User findUser(@Param("username") String username, @Param("password") String password);
 }
