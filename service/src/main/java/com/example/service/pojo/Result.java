@@ -8,12 +8,12 @@ import org.hibernate.validator.internal.engine.messageinterpolation.parser.Escap
  *
  * 统一结果返回
  */
-public class Result<T> {
-    private int code;
-    private T data;
-    private String reason;
+public class Result {
+    public int code;
+    public Object data;
+    public String reason;
 
-    private Result(int code, T data) {
+    private Result(int code, Object data) {
         this.code = code;
         this.data = data;
     }
@@ -23,11 +23,11 @@ public class Result<T> {
         this.reason = reason;
     }
 
-    public static <T> Result<T> successResult(int code, T data){
-        return new Result<>(code, data);
+    public static Result SUCCESS(int code, Object data){
+        return new Result(code, data);
     }
 
-    public static Result errorResult(int code, String reason){
-        return new Result<>(code, reason);
+    public static Result ERROR(int code, String reason){
+        return new Result(code, reason);
     }
 }

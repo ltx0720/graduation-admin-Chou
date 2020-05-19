@@ -19,4 +19,20 @@ public class TokenDetail {
         this.issue = issue;
         this.alive = alive;
     }
+
+    public long getAlive() {
+        return alive;
+    }
+
+    public void setAlive(long alive) {
+        this.alive = alive;
+    }
+
+    public long getIssue() {
+        return issue;
+    }
+
+    public void setIssue(long issue) {
+        this.issue = issue;
+    }
 }

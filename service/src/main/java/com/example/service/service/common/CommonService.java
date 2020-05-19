@@ -1,7 +1,7 @@
 package com.example.service.service.common;
 
 import com.example.service.pojo.News;
-import org.apache.ibatis.annotations.Param;
+import com.example.service.pojo.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +12,14 @@ import java.util.List;
  */
 @Service
 public interface CommonService {
-    List<News> getSimpleNews(int school_id, int student_id);
+
+    String getMenuList(int manager_id, int roles);
+
+    List<News> getSimpleNews(int school_id, int department_id);
 
     News getNewsDetail(int id);
+
+    Integer teacherPublishNews(User user, News news);
+
+    List<News> getSimpleNewsTeacher(User user);
 }

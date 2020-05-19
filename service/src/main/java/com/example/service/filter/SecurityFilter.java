@@ -5,14 +5,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * @Author ltx
@@ -20,16 +16,20 @@ import java.io.IOException;
  *
  * 自定义用户校验拦截器
  */
-public class MyUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class SecurityFilter extends AbstractAuthenticationProcessingFilter {
 
-    public MyUsernamePasswordAuthenticationFilter() {
-        super(new AntPathRequestMatcher("/", "POST"));
+
+    public SecurityFilter() {
+//        super(new AntPathRequestMatcher("/c_server/*"));
+        super(new AntPathRequestMatcher("/login", "POST"));
     }
 
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        User user = (User)request.getAttribute("user");
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        System.out.println("SecurityFilter");
+//        User user = (User)request.getAttribute("user");
+        User user = new User((byte) 0);
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 

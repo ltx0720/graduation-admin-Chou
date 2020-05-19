@@ -48,7 +48,7 @@ public class GsonUtil {
      * 将json转化为对应的实体对象
      * new TypeToken<HashMap<String, Object>>(){}.getType()
      */
-    public static <T> T fromJson(byte[] json, Type type){
+    public static <T> T fromJson(String json, Type type){
         return nullableGson.fromJson(json, type);
     }
 

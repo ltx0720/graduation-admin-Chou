@@ -19,7 +19,7 @@ public class TokenUtil {
     private static String algorithm;
 
     public static boolean checkToken(HttpServletRequest request){
-        String token = request.getParameter("token");
+        String token = request.getHeader("token");
         return checkToken(request, token);
     }
 
@@ -58,7 +58,7 @@ public class TokenUtil {
      */
     private static boolean isAlive(String playload) {
         byte[] bytes = Base64.decode(playload);
-        Map<String, Object> map = GsonUtil.fromJson(bytes, Map.class);
+        Map<String, Object> map = GsonUtil.fromJson(new String(bytes), Map.class);
 
         TokenDetail tokenDetail = (TokenDetail) map.get("token_detail");
         long current = Calendar.getInstance().getTimeInMillis();
@@ -73,7 +73,7 @@ public class TokenUtil {
         String playload = token.split("\\.")[1];
         byte[] bytes = Base64.decode(playload);
 
-        Map<String, Object> map = GsonUtil.fromJson(bytes, Map.class);
+        Map<String, Object> map = GsonUtil.fromJson(new String(bytes), Map.class);
         User user = (User) map.get("user");
         request.setAttribute("user", user);
     }
