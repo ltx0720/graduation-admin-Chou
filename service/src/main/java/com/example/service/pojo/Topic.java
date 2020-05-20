@@ -14,6 +14,7 @@ public class Topic {
    public int school_id;
    public int department_id;
    public int teacher_id;
+   public int state;
    public String title;
    public String direction;
 }

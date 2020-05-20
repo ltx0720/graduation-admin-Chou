@@ -58,13 +58,13 @@ public class StudentController {
     }
 
     /**
-     * 选择导师
+     * 课题列表
      */
-    @RequestMapping(path = "/select", method = RequestMethod.POST)
-    public Result select(HttpServletRequest request){
-        int teacher_id = Integer.parseInt(request.getParameter("teacher_id"));
-        boolean result = studentService.selectTeacher(1, teacher_id);
-        return Result.SUCCESS(200, result);
+    @RequestMapping(path = "/topic", method = RequestMethod.POST)
+    public Result topicList(HttpServletRequest request){
+        List<Topic> topicList = studentService.getSelectTopicList(1);
+
+        return Result.SUCCESS(200, topicList);
     }
 
     /**
@@ -78,14 +78,17 @@ public class StudentController {
     }
 
     /**
-     * 选择导师
+     * 选择课题
      */
-    @RequestMapping(path = "/topic", method = RequestMethod.POST)
-    public Result topicList(HttpServletRequest request){
-        List<Topic> topicList = studentService.getSelectTopicList(1);
+    @RequestMapping(path = "/select_topic", method = RequestMethod.POST)
+    public Result select(HttpServletRequest request){
+        System.out.println("select");
+//        int topic_id = Integer.parseInt(request.getParameter("topic_id"));
+//        boolean b = studentService.selectTopic(1, topic_id);
 
-        return Result.SUCCESS(200, topicList);
+        return Result.SUCCESS(200, false);
     }
+
 
     /**
      *

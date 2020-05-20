@@ -54,14 +54,20 @@ public class StudentServiceImpl implements StudentService {
         map.put("student_id", 1);
         map.put("teacher_id", 1);
         map.put("result", true);
-        studentDao.seletedTeacher(map);
+        studentDao.seletTeacher(map);
 
         return (boolean) map.get("result");
     }
 
     @Override
-    public int selectTopic(int school_id, int department_id, int student_id, int topic_id) {
-        return 0;
+    public boolean selectTopic(int student_id, int topic_id) {
+        HashMap<String, Object> map = new HashMap<>(3);
+        map.put("student_id", student_id);
+        map.put("topic_id", topic_id);
+        map.put("result", true);
+
+        studentDao.seletTopic(map);
+        return (boolean) map.get("result");
     }
 
     @Override

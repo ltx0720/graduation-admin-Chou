@@ -50,7 +50,7 @@ public interface StudentService {
     /**
      * 选择课题
      */
-    int selectTopic(int school_id, int department_id, int student_id,int topic_id);
+    boolean selectTopic(int student_id, int topic_id);
 
 
     /**

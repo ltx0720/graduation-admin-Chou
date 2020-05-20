@@ -2,6 +2,8 @@ package com.example.service.pojo;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @Author ltx
  * @Date 22:46 2020/5/11
@@ -10,12 +12,17 @@ import lombok.Data;
  */
 @Data
 public class Menu {
-    private int id;
-    private int father_id;
-    private int roles;
-    private String path;
-    private String component;
-    private Meta meta;
+    public int id;
+    public int group_id;
+    public int father_id;
+    public int roles;
+    public boolean active;
+    public String name;
+    public String path;
+    public String component;
+    public Meta meta;
+    public List<Menu> children;
+
 
     public int getId() {
         return id;
@@ -23,6 +30,14 @@ public class Menu {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getGroup_id() {
+        return group_id;
+    }
+
+    public void setGroup_id(int group_id) {
+        this.group_id = group_id;
     }
 
     public int getFather_id() {
@@ -39,6 +54,22 @@ public class Menu {
 
     public void setRoles(int roles) {
         this.roles = roles;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPath() {
@@ -63,5 +94,29 @@ public class Menu {
 
     public void setMeta(Meta meta) {
         this.meta = meta;
+    }
+
+    public List<Menu> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Menu> children) {
+        this.children = children;
+    }
+
+    @Override
+    public String toString() {
+        return "Menu{" +
+                "id=" + id +
+                ", group_id=" + group_id +
+                ", father_id=" + father_id +
+                ", roles=" + roles +
+                ", active=" + active +
+                ", name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                ", component='" + component + '\'' +
+                ", meta=" + meta +
+                ", children=" + children +
+                '}';
     }
 }

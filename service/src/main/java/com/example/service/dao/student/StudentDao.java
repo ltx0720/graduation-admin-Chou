@@ -50,11 +50,11 @@ public interface StudentDao {
 
 
     /**
-     * 可供选择的课题
+     * 可供选择的课题列表
      */
-    @Select("select t.title, t.direction from topic t " +
+    @Select("select t.id, t.title, t.direction, t.state from topic t " +
             "left join student s on t.teacher_id = s.teacher_id " +
-            "where s.id=#{student_id} and t.state=1")
+            "where s.id=#{student_id}")
     List<Topic> getSelectTopicList(int student_id);
 
     /**
@@ -83,7 +83,7 @@ public interface StudentDao {
             "#{param.result, mode=OUT, jdbcType=BOOLEAN})"
     )
     @Options(statementType= StatementType.CALLABLE)
-    void seletedTeacher(@Param("param") Map param);
+    void seletTeacher(@Param("param") Map param);
 
     /**
      * 选择课题
@@ -94,5 +94,5 @@ public interface StudentDao {
             "#{param.result, mode=OUT, jdbcType=BOOLEAN})"
     )
     @Options(statementType = StatementType.CALLABLE)
-    void seletedTopic(@Param("param") Map param);
+    void seletTopic(@Param("param") Map param);
 }

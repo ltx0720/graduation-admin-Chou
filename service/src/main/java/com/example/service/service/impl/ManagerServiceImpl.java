@@ -1,16 +1,14 @@
 package com.example.service.service.impl;
 
 import com.example.service.dao.manager.ManagerDao;
-import com.example.service.pojo.ChangeTeacherApprove;
-import com.example.service.pojo.News;
-import com.example.service.pojo.TeacherApprove;
-import com.example.service.pojo.User;
+import com.example.service.pojo.*;
 import com.example.service.service.manager.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 /**
  * @Author ltx
@@ -39,13 +37,47 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
-    public boolean approveHandle(int id, User user, String state){
-        if ("pass".equals(state)) {
-            return managerDao.approveHandle(id, user.getIdentify_id(), 1) == 1;
-        } else if ("refuse".equals(state)) {
-            return managerDao.approveHandle(id, user.getIdentify_id(),-1) == 1;
+    public boolean approveHandle(int id, User user, String opinion, String action) {
+        if ("pass".equals(action)) {
+            return managerDao.approveHandle(id, user.getIdentify_id(), opinion, 1) == 1;
+        } else if ("refuse".equals(action)) {
+            return managerDao.approveHandle(id, user.getIdentify_id(),opinion, -1) == 1;
         }
 
         return false;
+    }
+
+
+    @Override
+    public Map<Integer, List<ManageMenu>> getMenuList(int manager_id) {
+
+        /**
+         * 1. List<Menu> -> Map<Interger, List>   key:group_id, value:属于该分组的list
+         * 2. 对 Map<Interger, List> 里的每组进行子父级聚合。
+         */
+        List<ManageMenu> menuList = managerDao.getMenuList(manager_id);
+        Map<Integer, List<ManageMenu>> listMap = menuList.stream().collect(Collectors.groupingBy(ManageMenu::getGroup_id));
+
+        // 子父级聚合
+        listMap.forEach((k, v) -> {
+            List<ManageMenu> parentList = new ArrayList<>();
+
+            List<ManageMenu> finalV = v;
+            finalV.stream().filter(menu -> menu.getParentId()==0).forEach(menu -> {
+                List<ManageMenu> childList = finalV.stream().filter(m -> {
+                    if (m.getParentId() == menu.id){
+                        m.setType(1);
+                        return true;
+                    }
+                    return false;
+                }).collect(Collectors.toList());
+                menu.setChildren(childList);
+                parentList.add(menu);
+            });
+
+            listMap.put(k, parentList);
+        });
+
+        return listMap;
     }
 }
