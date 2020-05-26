@@ -35,7 +35,7 @@ public class TokenUtil {
      * @return token
      */
     public static String generateToken(User user) {
-        TokenDetail detail = new TokenDetail(Calendar.getInstance().getTimeInMillis(), 123321l);
+        TokenDetail detail = new TokenDetail(Calendar.getInstance().getTimeInMillis(), 7 * 24 * 3600 * 1000);
 
         String header = getHeader();
         String playload = getPlayload(user, detail);
@@ -82,7 +82,7 @@ public class TokenUtil {
             sign = MD5.encrypt(data, salt);
         }
 
-        return sign;
+        return Base64.encode(sign.getBytes());
     }
 
     @Value("${token.salt}")

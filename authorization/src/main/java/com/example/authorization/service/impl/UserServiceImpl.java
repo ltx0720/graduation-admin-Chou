@@ -20,8 +20,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User validate(String username, String password) {
+        User user = null;
+        try {
+             user = dao.findUser(username, password);
 
-        User user = dao.findUser(username, password);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
         System.out.println(user);
         return user;

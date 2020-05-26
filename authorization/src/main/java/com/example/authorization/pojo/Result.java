@@ -35,8 +35,8 @@ public class Result {
         return new Result(Code.ERROR, Reason.ERROR);
     }
 
-    public static Result success(String token){
-        return new Result(Code.SUCCESS, token);
+    public static Result success(Object data){
+        return new Result(Code.SUCCESS, data);
     }
 
     public static Result rsa_error(){

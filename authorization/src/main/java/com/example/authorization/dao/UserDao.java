@@ -16,7 +16,7 @@ import java.util.Map;
 @Mapper
 public interface UserDao {
 
-    @Select("select * from user " +
+    @Select("select department_id, name, roles, identify_id from user " +
             "where username = #{username} and password = MD5(concat(left(#{password}, 5), #{password}, right(#{username}, 2)))")
     @Options(statementType= StatementType.CALLABLE)
     User findUser(@Param("username") String username, @Param("password") String password);
