@@ -14,14 +14,6 @@ public class Result {
     public Object data;
     public String reason;
 
-//    public static String jsonResult(int code, Object data){
-//        return JSONObject.toJSONString(new Result(code, data));
-//    }
-//
-//    public static String jsonResult(int code, String reason){
-//        return JSONObject.toJSONString(new Result(code, reason));
-//    }
-
     public Result(int code, Object data) {
         this.code = code;
         this.data = data;

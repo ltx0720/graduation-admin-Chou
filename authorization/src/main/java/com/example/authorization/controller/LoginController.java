@@ -31,7 +31,6 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-
     /**
      * 获取公钥
      * @return String 公钥
@@ -109,7 +108,7 @@ public class LoginController {
     }
 
     @Value("${rsa.publickey}")
-    public static void setPublicKey(String publicKey) {
+    public void setPublicKey(String publicKey) {
         LoginController.publicKey = publicKey;
     }
 }
