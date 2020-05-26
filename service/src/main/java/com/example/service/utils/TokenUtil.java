@@ -2,7 +2,9 @@ package com.example.service.utils;
 
 import com.example.service.pojo.TokenDetail;
 import com.example.service.pojo.User;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
@@ -14,12 +16,14 @@ import java.util.Map;
  *
  * token 工具
  */
+@Component
 public class TokenUtil {
     private static String salt;
     private static String algorithm;
 
     public static boolean checkToken(HttpServletRequest request){
         String token = request.getHeader("token");
+        System.out.println("head: "+ token);
         return checkToken(request, token);
     }
 
@@ -28,7 +32,7 @@ public class TokenUtil {
      */
     private static boolean checkToken(HttpServletRequest request, String token){
         if (!checkSign(token)) return false;
-        if (!isAlive(token)) return false;
+//        if (!isAlive(token)) return false;
 
         fetchData(request, token);
 
@@ -43,24 +47,29 @@ public class TokenUtil {
      */
     private static boolean checkSign(String token) {
         String[] split = token.split("\\.");
-        String sign = split[2];
+        String sign = new String(Base64.decode(split[2]));
+        String data = split[0] + "." + split[1];
 
-        String encrypt = MD5.encrypt(split[0] + "." + split[1], salt);
+        System.out.println("sign: " + sign);
+        System.out.println(data);
+
+        String encrypt = MD5.encrypt(data, salt);
 
         return encrypt.equals(sign);
     }
 
     /**
      * 判断 token 是否过期
-     *
-     * @param playload token 的 playload 部分
-     * @return true/false
      */
-    private static boolean isAlive(String playload) {
-        byte[] bytes = Base64.decode(playload);
-        Map<String, Object> map = GsonUtil.fromJson(new String(bytes), Map.class);
+    private static boolean isAlive(String token) {
+        String playload = token.split("\\.")[1];
+        String decode = new String(Base64.decode(playload));
+        Map<String, Object> map = GsonUtil.fromJson(decode, new TypeToken<Map<String,Object>>() {}.getType());
 
-        TokenDetail tokenDetail = (TokenDetail) map.get("token_detail");
+        Object object = map.get("token_detail");
+        String json = GsonUtil.toJson(object);
+        TokenDetail tokenDetail = (TokenDetail)GsonUtil.fromJson(json, TokenDetail.class);
+
         long current = Calendar.getInstance().getTimeInMillis();
 
         return current > tokenDetail.getIssue() + tokenDetail.getAlive();
@@ -74,7 +83,10 @@ public class TokenUtil {
         byte[] bytes = Base64.decode(playload);
 
         Map<String, Object> map = GsonUtil.fromJson(new String(bytes), Map.class);
-        User user = (User) map.get("user");
+        Object obj = map.get("user");
+        String json = GsonUtil.toJson(obj);
+
+        User user = GsonUtil.fromJson(json, User.class);
         request.setAttribute("user", user);
     }
 

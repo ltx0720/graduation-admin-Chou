@@ -17,7 +17,6 @@ public class SecurityAuthenticationHandler implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        System.out.println("SecurityAuthenticationHandler");
         return authentication;
     }
 

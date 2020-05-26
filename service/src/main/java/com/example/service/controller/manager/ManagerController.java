@@ -33,7 +33,7 @@ public class ManagerController {
 //        User user1 = new User();
 //        user1.setDepartment_id(1);
         List<News> newsList = managerService.getSimpleNewsManager(1);
-        return Result.SUCCESS(200, newsList);
+        return Result.success(200, newsList);
     }
 
     /**
@@ -42,7 +42,7 @@ public class ManagerController {
     @RequestMapping(path = "/approve/type/{type}", method = RequestMethod.POST)
     public Result ch_teacher_approve(HttpServletRequest request, @PathVariable("type") String type){
         List<ChangeTeacherApprove> approveList = managerService.getChangeTeacherApprove(1, type);
-        return Result.SUCCESS(200, approveList);
+        return Result.success(200, approveList);
     }
 
     /**
@@ -60,10 +60,10 @@ public class ManagerController {
         boolean b = managerService.approveHandle(id, user, opinion, action);
 
         if (b){
-            return Result.SUCCESS(200, "success");
+            return Result.success(200, "success");
         }
 
-        return Result.ERROR(400, "fail");
+        return Result.error(400, "fail");
     }
 
     /**

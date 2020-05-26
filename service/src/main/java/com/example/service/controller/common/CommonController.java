@@ -43,7 +43,7 @@ public class CommonController {
 
         List<News> news = commonService.getSimpleNews(user1.getSchool_id(), user1.getDepartment_id());
 
-        return Result.SUCCESS(200, news);
+        return Result.success(200, news);
     }
 
     /**
@@ -58,7 +58,7 @@ public class CommonController {
 
         List<News> news = commonService.getSimpleNewsTeacher(user1);
 
-        return Result.SUCCESS(200, news);
+        return Result.success(200, news);
     }
 
     /**
@@ -67,7 +67,7 @@ public class CommonController {
     @RequestMapping("/news/{news_id}")
     public Result message(@PathVariable("news_id") int news_id){
         System.out.println("news_id");
-        return Result.SUCCESS(200, commonService.getNewsDetail(news_id));
+        return Result.success(200, commonService.getNewsDetail(news_id));
     }
 
 
@@ -90,7 +90,7 @@ public class CommonController {
 
         commonService.teacherPublishNews(user, news);
 
-        return Result.SUCCESS(200, "");
+        return Result.success(200, "");
     }
 
 
@@ -115,6 +115,6 @@ public class CommonController {
 
         commonService.teacherPublishNews(user, news);
 
-        return Result.SUCCESS(200, "");
+        return Result.success(200, "");
     }
 }

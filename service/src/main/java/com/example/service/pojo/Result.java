@@ -1,7 +1,5 @@
 package com.example.service.pojo;
 
-import org.hibernate.validator.internal.engine.messageinterpolation.parser.EscapedState;
-
 /**
  * @Author ltx
  * @Date 21:10 2020/5/8
@@ -23,11 +21,11 @@ public class Result {
         this.reason = reason;
     }
 
-    public static Result SUCCESS(int code, Object data){
+    public static Result success(int code, Object data){
         return new Result(code, data);
     }
 
-    public static Result ERROR(int code, String reason){
+    public static Result error(int code, String reason){
         return new Result(code, reason);
     }
 }

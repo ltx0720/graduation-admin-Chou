@@ -35,7 +35,7 @@ public class TeacherController {
 //        User user = (User) request.getAttribute("user");
         List<Student> studentList = teacherService.getAllStudent(user1);
 
-        return Result.SUCCESS(200, studentList);
+        return Result.success(200, studentList);
     }
 
 
@@ -45,7 +45,7 @@ public class TeacherController {
     @RequestMapping(path = "/topic_approve/{type}", method = RequestMethod.POST)
     public Result getTopicApprove(HttpServletRequest request, @PathVariable("type") String type){
         List<TeacherApprove> teacherApprove = teacherService.getTeacherApprove(1, type);
-        return Result.SUCCESS(200, teacherApprove);
+        return Result.success(200, teacherApprove);
     }
 
     /**
@@ -62,9 +62,9 @@ public class TeacherController {
         boolean b = teacherService.approveHandle(id, user, action);
 
         if (b){
-            return Result.SUCCESS(200, "success");
+            return Result.success(200, "success");
         }
 
-        return Result.ERROR(400, "fail");
+        return Result.error(400, "fail");
     }
 }

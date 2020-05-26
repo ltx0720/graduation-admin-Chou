@@ -9,6 +9,7 @@ import com.example.service.pojo.TeacherApprove;
 import com.example.service.service.common.CommonService;
 import com.example.service.service.manager.ManagerService;
 import com.example.service.service.student.StudentService;
+import com.example.service.utils.MD5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -69,8 +70,21 @@ public class TEST {
     @ResponseBody
     public Result dsada() {
 
-        return Result.SUCCESS(200,  managerService.getMenuList(1));
+        return Result.success(200,  managerService.getMenuList(1));
     }
+
+    @PostMapping("/md")
+    @ResponseBody
+    public Result md5() {
+
+        String data = "eyJ0eXBlIjoiSldUIiwiYWxnb3JpdGhtIjoibWQ1In0=.eyJ1c2VyIjp7ImlkIjowLCJyb2xlcyI6MCwic2Nob29sX2lkIjowLCJkZXBhcnRtZW50X2lkIjoxLCJpZGVudGlmeV9pZCI6MSwibmFtZSI6IuWImOWkqemchCJ9LCJ0b2tlbl9kZXRhaWwiOnsiaXNzdWUiOjE1OTA1MDY4NTIxOTgsImFsaXZlIjo2MDQ4MDAwMDB9fQ==";
+        String salt = "123";
+
+        String s1 = MD5.encrypt(data, salt);
+        String s2 = MD5.encrypt(data, salt);
+        return Result.success(200,  managerService.getMenuList(1));
+    }
+
 
 
 }

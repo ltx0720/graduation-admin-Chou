@@ -11,9 +11,9 @@ import lombok.Data;
 @Data
 public class TokenDetail {
     // 签发时间
-    private long issue;
+    public long issue;
     // 有效时间
-    private long alive;
+    public long alive;
 
     public TokenDetail(long issue, long alive) {
         this.issue = issue;

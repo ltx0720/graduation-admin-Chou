@@ -17,6 +17,6 @@ public class ExceptionHandler {
      */
     @org.springframework.web.bind.annotation.ExceptionHandler(value = TokenErrorException.class)
     public Result tokenError(Exception e){
-        return Result.ERROR(400, e.getMessage());
+        return Result.error(400, e.getMessage());
     }
 }

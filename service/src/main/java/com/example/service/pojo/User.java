@@ -1,5 +1,6 @@
 package com.example.service.pojo;
 
+import com.google.gson.annotations.SerializedName;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import java.util.Collection;
  * 用户
  */
 public class User implements UserDetails {
+   @SerializedName("roles")
    private byte role;
    private int school_id;
    private int department_id;

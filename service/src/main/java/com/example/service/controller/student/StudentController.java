@@ -32,7 +32,7 @@ public class StudentController {
     @RequestMapping(path = "/news", method = RequestMethod.POST)
     public Result getNews(HttpServletRequest request){
         List<News> newsList = studentService.getSimpleNews(1);
-        return Result.SUCCESS(200, newsList);
+        return Result.success(200, newsList);
     }
 
     /**
@@ -45,7 +45,7 @@ public class StudentController {
         user1.setDepartment_id(1);
 
         List<SelectTeacher> selectTeacher = studentService.getSelectTeacher(user1.getSchool_id(), user1.getDepartment_id());
-        return Result.SUCCESS(200, selectTeacher);
+        return Result.success(200, selectTeacher);
     }
 
     /**
@@ -54,7 +54,7 @@ public class StudentController {
     @RequestMapping(path = "/isselected_teacher", method = RequestMethod.POST)
     public Result isSelectedTeacher(HttpServletRequest request){
         boolean isSelected = studentService.isSelectedTeacher(1);
-        return Result.SUCCESS(200, isSelected);
+        return Result.success(200, isSelected);
     }
 
     /**
@@ -64,7 +64,7 @@ public class StudentController {
     public Result topicList(HttpServletRequest request){
         List<Topic> topicList = studentService.getSelectTopicList(1);
 
-        return Result.SUCCESS(200, topicList);
+        return Result.success(200, topicList);
     }
 
     /**
@@ -74,7 +74,7 @@ public class StudentController {
     public Result isSelectTopic(HttpServletRequest request){
         boolean result = studentService.isSelectedTopic(1);
 
-        return Result.SUCCESS(200, result);
+        return Result.success(200, result);
     }
 
     /**
@@ -86,7 +86,7 @@ public class StudentController {
 //        int topic_id = Integer.parseInt(request.getParameter("topic_id"));
 //        boolean b = studentService.selectTopic(1, topic_id);
 
-        return Result.SUCCESS(200, false);
+        return Result.success(200, false);
     }
 
 

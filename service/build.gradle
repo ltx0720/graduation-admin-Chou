@@ -12,13 +12,5 @@ configurations {
 }
 
 dependencies {
-//    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.2.6.RELEASE'
-//    compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '2.2.6.RELEASE'
-    // https://mvnrepository.com/artifact/com.google.code.gson/gson
     implementation 'org.springframework.boot:spring-boot-starter-security'
-
-
 }
-//test {
-//    useJUnitPlatform()
-//}
