@@ -1,5 +1,6 @@
 package com.example.fileserver.controller;
 
+import com.example.fileserver.pojo.User;
 import com.example.fileserver.pojo.file.File;
 import com.example.fileserver.pojo.file.GroupFile;
 import com.example.fileserver.pojo.Result;
@@ -59,12 +60,15 @@ public class UploadController {
      */
     @RequestMapping(path = "/record", method = RequestMethod.POST)
     public Result writeUploadLog(HttpServletRequest request){
-//        User user = (User) request.getAttribute("user");
+        User user = (User) request.getAttribute("user");
 
         String key = request.getParameter("key");
+        int type_id = Integer.parseInt(request.getParameter("type_id"));
+
         GroupFile file = new GroupFile();
         file.setBucket(bucket);
-        file.setFile_name(key);
+        file.setFile_name(user.getAuthorities() + ("-"+user.getIdentify_id()+"-")+ key);
+        file.setType_id(type_id);
         file.setUrl(String.format("%s%s", bucket, key));
 
         boolean result = uploadService.witeUploadRecord(1, file);

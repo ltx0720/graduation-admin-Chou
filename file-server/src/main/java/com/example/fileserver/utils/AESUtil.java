@@ -123,14 +123,4 @@ public class AESUtil {
         return null;
     }
 
-    public static void main(String[] args) {
-        String content = "hello,您好";
-        String key = "sde@5f98H*^hsff%dfs$r344&df8543*er";
-        System.out.println("content:" + content);
-        String s1 = AESUtil.encrypt(content, key);
-        System.out.println("s1:" + s1);
-        System.out.println("s2:" + AESUtil.decrypt(s1, key));
-
-    }
-
 }

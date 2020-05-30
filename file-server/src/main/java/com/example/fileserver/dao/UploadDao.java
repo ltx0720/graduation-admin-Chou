@@ -15,7 +15,7 @@ public interface UploadDao {
     /**
      * 前端上传记录写库
      */
-    @Insert("insert into file (identify_number, filename, bucket, url) " +
-            " values (#{identify_number}, #{file.file_name}, #{file.bucket}, #{file.url})")
+    @Insert("insert into file (identify_number, type_id, filename, bucket, url) " +
+            " values (#{identify_number}, #{file.type_id}, #{file.file_name}, #{file.bucket}, #{file.url})")
     Integer witeUploadRecord(@Param("identify_number") int identify_number, @Param("file") GroupFile file);
 }

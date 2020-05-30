@@ -1,5 +1,6 @@
 package com.example.fileserver.pojo;
 
+import com.google.gson.annotations.SerializedName;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,23 +15,36 @@ import java.util.Collection;
  * 用户
  */
 public class User implements UserDetails {
+   @SerializedName("roles")
+   private byte role;
    private int school_id;
    private int department_id;
    private int identify_id;
-   private String role;
    private String name;
    private String phone;
    private String mail;
 
-   public User(String role) {
+   public User(byte role) {
       this.role = role;
    }
-
-   public User() {}
+   public User() {
+   }
 
    @Override
    public Collection<? extends GrantedAuthority> getAuthorities() {
-      return Arrays.asList(new SimpleGrantedAuthority(this.role));
+      String authority = "";
+      switch (role){
+         case 1:
+            authority = "ROLE_STU";
+            break;
+         case 2:
+            authority = "ROLE_TEA";
+            break;
+         case 3:
+            authority = "ROLE_MAN";
+            break;
+      }
+      return Arrays.asList(new SimpleGrantedAuthority(authority));
    }
 
    @Override
@@ -63,6 +77,13 @@ public class User implements UserDetails {
       return true;
    }
 
+   public byte getRole() {
+      return role;
+   }
+
+   public void setRole(byte role) {
+      this.role = role;
+   }
 
    public int getSchool_id() {
       return school_id;
@@ -86,14 +107,6 @@ public class User implements UserDetails {
 
    public void setIdentify_id(int identify_id) {
       this.identify_id = identify_id;
-   }
-
-   public String getRole() {
-      return role;
-   }
-
-   public void setRole(String role) {
-      this.role = role;
    }
 
    public String getName() {

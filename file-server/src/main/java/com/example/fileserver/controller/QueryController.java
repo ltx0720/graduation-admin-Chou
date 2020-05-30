@@ -31,10 +31,10 @@ public class QueryController {
      */
     @RequestMapping(path = "/file-list", method = RequestMethod.POST)
     public Result getVisibleFileList(HttpServletRequest request){
-//        User user = (User) request.getAttribute("user");
-        User user = new User();
-        user.setRole("SCHOOL");
-        user.setIdentify_id(1);
+        User user = (User) request.getAttribute("user");
+//        User user = new User();
+//        user.setRole("SCHOOL");
+//        user.setIdentify_id(1);
 
         List list = getVisibleFileListHandler(user);
 
@@ -45,14 +45,14 @@ public class QueryController {
      * 根据不同权限返回不同数据
      */
     private List getVisibleFileListHandler(User user){
-        String role = user.getRole();
+        byte role = user.getRole();
         int identify_id = user.getIdentify_id();
 
-        if ("TEACHER".equals(role)) return queryService.getTeacherFileList(identify_id);
+        if (role == 1) return queryService.getTeacherFileList(identify_id);
 
-        if ("DEPARTMENT".equals(role))  return queryService.getDepartmentFileList(identify_id);
+        if (role == 2)  return queryService.getDepartmentFileList(identify_id);
 
-        if ("SCHOOL".equals(role)) return queryService.getSchoolFileList();
+//        if ("SCHOOL".equals(role)) return queryService.getSchoolFileList();
 
 
         return Collections.EMPTY_LIST;

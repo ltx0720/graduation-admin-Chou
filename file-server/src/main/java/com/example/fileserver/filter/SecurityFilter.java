@@ -29,7 +29,8 @@ public class SecurityFilter extends AbstractAuthenticationProcessingFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         System.out.println("SecurityFilter");
 //        User user = (User)request.getAttribute("user");
-        User user = new User("ROLE_TEACHER");
+
+        User user = (User) request.getAttribute("user");
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
