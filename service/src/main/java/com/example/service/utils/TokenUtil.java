@@ -23,7 +23,6 @@ public class TokenUtil {
 
     public static boolean checkToken(HttpServletRequest request){
         String token = request.getHeader("token");
-        System.out.println("head: "+ token);
         return checkToken(request, token);
     }
 
@@ -32,7 +31,7 @@ public class TokenUtil {
      */
     private static boolean checkToken(HttpServletRequest request, String token){
         if (!checkSign(token)) return false;
-//        if (!isAlive(token)) return false;
+        if (!isAlive(token)) return false;
 
         fetchData(request, token);
 
@@ -49,9 +48,6 @@ public class TokenUtil {
         String[] split = token.split("\\.");
         String sign = new String(Base64.decode(split[2]));
         String data = split[0] + "." + split[1];
-
-        System.out.println("sign: " + sign);
-        System.out.println(data);
 
         String encrypt = MD5.encrypt(data, salt);
 
@@ -72,7 +68,7 @@ public class TokenUtil {
 
         long current = Calendar.getInstance().getTimeInMillis();
 
-        return current > tokenDetail.getIssue() + tokenDetail.getAlive();
+        return current < tokenDetail.getIssue() + tokenDetail.getAlive();
     }
 
     /**

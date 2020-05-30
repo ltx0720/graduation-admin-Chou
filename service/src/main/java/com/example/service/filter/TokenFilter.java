@@ -16,12 +16,14 @@ import java.io.IOException;
  */
 public class TokenFilter extends OncePerRequestFilter {
 
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         StringBuffer url = request.getRequestURL();
-        System.out.println("url: " + url.toString());
 
-        if (url.toString().contains("test") || TokenUtil.checkToken(request)) {
+//        System.out.println(url.toString());
+
+        if (url.toString().contains("test") ||  TokenUtil.checkToken(request)) {
             filterChain.doFilter(request, response);
         } else {
             /*

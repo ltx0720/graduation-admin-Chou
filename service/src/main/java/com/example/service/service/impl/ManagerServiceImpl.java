@@ -80,4 +80,30 @@ public class ManagerServiceImpl implements ManagerService {
 
         return listMap;
     }
+
+    @Override
+    public boolean managerPublish(User user, News news) {
+        Integer row = managerDao.managerPublish(user, news);
+        return row == 1;
+    }
+
+    @Override
+    public List<SelectTeacher> getTeacherList(int manager_id) {
+        return managerDao.getTeacherList(manager_id);
+    }
+
+    @Override
+    public List<SelectTeacher> getCanPublishTeacherList(int manager_id) {
+        return managerDao.getCanPublishTeacherList(manager_id);
+    }
+
+    @Override
+    public boolean submitTeacher(int department_id, SelectTeacher teacher) {
+        return managerDao.submitTeacher(department_id, teacher) == 1;
+    }
+
+    @Override
+    public boolean changeSelectTeacherState(int department_id, int id, int state) {
+        return managerDao.changeSelectTeacherState(department_id, id, state) == 1;
+    }
 }

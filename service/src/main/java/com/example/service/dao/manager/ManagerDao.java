@@ -19,10 +19,10 @@ public interface ManagerDao {
     /**
      * 获取消息通知
      */
-    @Select("select news.create_time, news.author, news.title from news " +
+    @Select("select create_time as create_time, author as author, title as title from news " +
             "where state=0 " +
             " or (state=1 and department_id=#{department_id}) ")
-    List<News> getSimpleNewsManager(@Param("department_id") int department_id);
+    List<News> getSimpleNewsManager(int department_id);
 
     /**
      * 待审批条目
@@ -65,4 +65,45 @@ public interface ManagerDao {
             "from menu me left join manager ma on me.department_id = ma.department_id " +
             "where ma.id = #{manager_id}")
     List<ManageMenu> getMenuList(int manager_id);
+
+
+    /**
+     * 发布通知
+     */
+    @Insert("insert into news (department_id, create_time, state, author, content, title) " +
+            "values ( #{user.department_id}, #{news.create_time}, 1, #{user.name}, #{news.content}, #{news.title})")
+    Integer managerPublish(@Param("user") User user, @Param("news") News news);
+
+
+    /**
+     * 获取可操作的教师
+     */
+    @Select("select st.id, t.name as teacher_name, t.major, st.account, st.num, st.state from select_teacher st" +
+            " left join teacher t on st.teacher_id = t.id " +
+            " left join manager m on m.department_id = st.department_id" +
+            " where m.id = #{manager_id}")
+    List<SelectTeacher> getTeacherList(int manager_id);
+
+    /**
+     * 获取未发布供学生选择的教师
+     */
+    @Select("select t.id, t.name as teacher_name, t.major from teacher t " +
+            "    left join manager m on m.department_id = t.department_id " +
+            "where m.id = #{manager_id}  " +
+            "and t.id not in (select teacher_id from select_teacher st left join manager m on st.department_id = m.department_id)")
+    List<SelectTeacher> getCanPublishTeacherList(int manager_id);
+
+    /**
+     * 发布导师信息
+     */
+    @Insert("insert into select_teacher (department_id, teacher_id, account, state)" +
+            " values (#{department_id}, #{teacher.teacher_id}, #{teacher.account}, #{teacher.state})")
+    Integer submitTeacher(@Param("department_id") int department_id, @Param("teacher") SelectTeacher teacher);
+
+
+    /**
+     *  改变供选择的导师的状态，用来控制学生端的可见
+     */
+    @Update("update select_teacher set state=#{state} where department_id=#{department_id} and id=#{id} ")
+    Integer changeSelectTeacherState(@Param("department_id") int department_id, @Param("id") int id, @Param("state") int state);
 }

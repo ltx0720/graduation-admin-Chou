@@ -34,13 +34,13 @@ public class User implements UserDetails {
    public Collection<? extends GrantedAuthority> getAuthorities() {
       String authority = "";
       switch (role){
-         case 0:
+         case 1:
             authority = "ROLE_STU";
             break;
-         case 1:
+         case 2:
             authority = "ROLE_TEA";
             break;
-         case 2:
+         case 3:
             authority = "ROLE_MAN";
             break;
       }

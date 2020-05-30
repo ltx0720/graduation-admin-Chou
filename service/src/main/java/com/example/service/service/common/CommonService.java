@@ -1,10 +1,13 @@
 package com.example.service.service.common;
 
+import com.example.service.pojo.Menu;
 import com.example.service.pojo.News;
 import com.example.service.pojo.User;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author ltx
@@ -13,7 +16,7 @@ import java.util.List;
 @Service
 public interface CommonService {
 
-    String getMenuList(int manager_id, int roles);
+    List<Map<String, Object>> getMenuList(int department_id, int roles);
 
     List<News> getSimpleNews(int school_id, int department_id);
 

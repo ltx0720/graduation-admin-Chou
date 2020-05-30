@@ -18,4 +18,6 @@ public class SelectTeacher {
     public String information;
     public String major;
     public int num;
+    public int account;
+    public boolean state;
 }

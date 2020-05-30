@@ -5,6 +5,6 @@ package com.example.service.pojo;
  * @Date 23:59 2020/5/11
  */
 public class Meta {
-    private String title;
-    private String icon;
+    public String title;
+    public String icon;
 }

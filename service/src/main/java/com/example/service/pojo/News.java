@@ -10,16 +10,23 @@ import java.util.Date;
  * @Author ltx
  * @Date 16:36 2020/5/8
  */
-@Component
+@Data
 public class News {
-    private int id;
-    private String content;
-    private int school_id;
-    private int user_id;
+    public int id;
+    public String content;
+    public int school_id;
+    public int user_id;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date create_time;
-    private String author;
-    private String title;
+    public String create_time;
+    public String author;
+    public String title;
+
+//    public News(String content,  String title, Date create_time) {
+//        this.content = content;
+//        this.create_time = create_time;
+//        this.title = title;
+//    }
+
 
     public int getId() {
         return id;
@@ -53,12 +60,11 @@ public class News {
         this.user_id = user_id;
     }
 
-
-    public Date getCreate_time() {
+    public String getCreate_time() {
         return create_time;
     }
 
-    public void setCreate_time(Date create_time) {
+    public void setCreate_time(String create_time) {
         this.create_time = create_time;
     }
 

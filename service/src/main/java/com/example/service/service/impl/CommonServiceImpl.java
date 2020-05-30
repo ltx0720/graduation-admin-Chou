@@ -23,25 +23,48 @@ public class CommonServiceImpl implements CommonService {
     private CommonDao dao;
 
     @Override
-    public String getMenuList(int manager_id, int roles) {
-        List<Menu> menuList = dao.getMenuList(manager_id, roles);
+    public List<Map<String, Object>> getMenuList(int department_id, int roles) {
+        List<Menu> menuList = dao.getMenuList(department_id, roles);
         List<Map<String, Object>> list = new ArrayList<>();
 
-        for (Menu menu : menuList){
-            Map map = new LinkedHashMap(1);
+        for (Menu menu : menuList) {
             int father_id = menu.getFather_id();
-            if (father_id == 0){
-                List<Menu> childrenMenu = menuList.stream().filter(m -> m.getFather_id() == father_id).collect(Collectors.toList());
+            if (father_id == 0) {
+                Map map = new LinkedHashMap(1);
+                List<Menu> childrenMenu = menuList.stream().filter(m -> m.getFather_id() == menu.id).collect(Collectors.toList());
 
                 map.put("path", menu.getPath());
                 map.put("component", menu.getComponent());
+                map.put("meta", menu.getMeta());
                 map.put("children", childrenMenu);
+                list.add(map);
             }
-            list.add(map);
         }
 
-        return GsonUtil.toJson(list);
+        return list;
     }
+
+
+    //    @Override
+//    public List<Menu> getMenuList(int manager_id, int roles) {
+//        List<Menu> menuList = dao.getMenuList(manager_id, roles);
+//        List<Map<String, Object>> list = new ArrayList<>();
+//
+//        for (Menu menu : menuList){
+//            Map map = new LinkedHashMap(1);
+//            int father_id = menu.getFather_id();
+//            if (father_id == 0){
+//                List<Menu> childrenMenu = menuList.stream().filter(m -> m.getFather_id() == father_id).collect(Collectors.toList());
+//
+//                map.put("path", menu.getPath());
+//                map.put("component", menu.getComponent());
+//                map.put("children", childrenMenu);
+//            }
+//            list.add(map);
+//        }
+//
+//        return GsonUtil.toJson(list);
+//    }
 
     @Override
     public News getNewsDetail(int id) {

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author ltx
@@ -33,7 +34,7 @@ public class CommonController {
     /**
      * 学生获取消息通知
      */
-    @RequestMapping(value = "/s_news", method = RequestMethod.POST)
+    @RequestMapping(path = "/s_news", method = RequestMethod.POST)
     public Result getMsg(HttpServletRequest request){
         System.out.println("news");
 //        User user = (User) request.getAttribute("user");
@@ -49,7 +50,7 @@ public class CommonController {
     /**
      * 导师获取消息通知
      */
-    @RequestMapping(value = "/t_news", method = RequestMethod.POST)
+    @RequestMapping(path = "/t_news", method = RequestMethod.POST)
     public Result getMsgTeacher(HttpServletRequest request){
 //        User user = (User) request.getAttribute("user");
         User user1 = new User((byte) 0);
@@ -74,9 +75,10 @@ public class CommonController {
     /**
      * 导师推送通知
      */
-    @RequestMapping(value = "/t_publish", method = RequestMethod.POST)
+    @RequestMapping(path = "/t_publish", method = RequestMethod.POST)
     public Result publish(HttpServletRequest request){
         String content = request.getParameter("content");
+        String title = request.getParameter("title");
 
         User user = new User((byte) 1);
         user.setSchool_id(1);
@@ -84,9 +86,6 @@ public class CommonController {
         user.setIdentify_id(1);
 
         News news = new News();
-        news.setAuthor("导师1");
-        news.setContent(content);
-        news.setCreate_time(new Date());
 
         commonService.teacherPublishNews(user, news);
 
@@ -94,27 +93,15 @@ public class CommonController {
     }
 
 
-    @RequestMapping(value = "/m_publish", method = RequestMethod.POST)
-    public Result mpublish(HttpServletRequest request){
+    @RequestMapping(path = "/menu", method = RequestMethod.POST)
+    public Result getMenuList(HttpServletRequest request){
+        User user = (User)request.getAttribute("user");
+        System.out.println(user);
+        List<Map<String, Object>> menuList =
+                commonService.getMenuList(user.getDepartment_id(), user.getRole());
 
-
-        String content = request.getParameter("content");
-
-        System.out.println(content);
-
-
-        User user = new User((byte) 1);
-        user.setSchool_id(1);
-        user.setDepartment_id(1);
-        user.setIdentify_id(1);
-
-        News news = new News();
-        news.setAuthor("导师1");
-        news.setContent(content);
-        news.setCreate_time(new Date());
-
-        commonService.teacherPublishNews(user, news);
-
-        return Result.success(200, "");
+        return Result.success(200, menuList);
     }
+
+
 }

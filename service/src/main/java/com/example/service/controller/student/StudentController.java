@@ -53,7 +53,8 @@ public class StudentController {
      */
     @RequestMapping(path = "/isselected_teacher", method = RequestMethod.POST)
     public Result isSelectedTeacher(HttpServletRequest request){
-        boolean isSelected = studentService.isSelectedTeacher(1);
+        User user = (User)request.getAttribute("user");
+        boolean isSelected = studentService.isSelectedTeacher(user.getIdentify_id());
         return Result.success(200, isSelected);
     }
 
@@ -62,7 +63,8 @@ public class StudentController {
      */
     @RequestMapping(path = "/topic", method = RequestMethod.POST)
     public Result topicList(HttpServletRequest request){
-        List<Topic> topicList = studentService.getSelectTopicList(1);
+        User user = (User)request.getAttribute("user");
+        List<Topic> topicList = studentService.getSelectTopicList(user.getIdentify_id());
 
         return Result.success(200, topicList);
     }
@@ -72,7 +74,8 @@ public class StudentController {
      */
     @RequestMapping(path = "/isselected_topic", method = RequestMethod.POST)
     public Result isSelectTopic(HttpServletRequest request){
-        boolean result = studentService.isSelectedTopic(1);
+        User user = (User)request.getAttribute("user");
+        boolean result = studentService.isSelectedTopic(user.getIdentify_id());
 
         return Result.success(200, result);
     }
@@ -82,11 +85,11 @@ public class StudentController {
      */
     @RequestMapping(path = "/select_topic", method = RequestMethod.POST)
     public Result select(HttpServletRequest request){
-        System.out.println("select");
-//        int topic_id = Integer.parseInt(request.getParameter("topic_id"));
-//        boolean b = studentService.selectTopic(1, topic_id);
+        User user = (User)request.getAttribute("user");
+        int topic_id = Integer.parseInt(request.getParameter("topic_id"));
+        boolean res = studentService.selectTopic(user.getIdentify_id(), topic_id);
 
-        return Result.success(200, false);
+        return Result.success(200, res);
     }
 
 

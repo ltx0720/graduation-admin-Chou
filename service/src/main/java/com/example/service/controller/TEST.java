@@ -1,11 +1,9 @@
 package com.example.service.controller;
 
+import com.example.service.dao.common.CommonDao;
 import com.example.service.dao.manager.ManagerDao;
 import com.example.service.dao.student.StudentDao;
-import com.example.service.pojo.ChangeTeacherApprove;
-import com.example.service.pojo.Menu;
-import com.example.service.pojo.Result;
-import com.example.service.pojo.TeacherApprove;
+import com.example.service.pojo.*;
 import com.example.service.service.common.CommonService;
 import com.example.service.service.manager.ManagerService;
 import com.example.service.service.student.StudentService;
@@ -15,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +84,28 @@ public class TEST {
         return Result.success(200,  managerService.getMenuList(1));
     }
 
+    @Autowired
+    CommonDao commonDao;
 
+    @PostMapping("/list")
+    @ResponseBody
+    public Result list312312() {
+//        List<Menu> list = commonDao.getMenuList(1, 0);
+//
+        List<Map<String, Object>> list = service.getMenuList(1, 0);
+        return Result.success(200,  list);
+    }
+
+    @Autowired
+    CommonService commonService;
+    @RequestMapping(path = "/menu", method = RequestMethod.POST)
+    public Result getMenuList(HttpServletRequest request){
+//        User user = (User)request.getAttribute("user");
+        List<Map<String, Object>> menuList =
+                commonService.getMenuList(1, 3);
+
+        return Result.success(200, menuList);
+    }
 
 }
 

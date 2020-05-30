@@ -3,9 +3,8 @@ package com.example.service.dao.common;
 import com.example.service.pojo.Menu;
 import com.example.service.pojo.News;
 import com.example.service.pojo.User;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import com.google.gson.annotations.SerializedName;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -14,17 +13,11 @@ import java.util.List;
 /**
  * @Author ltx
  * @Date 16:34 2020/5/8
- * <p>
+ *
  * 公共 dao
  */
 @Mapper
 public interface CommonDao {
-
-    /**
-     * 获取用户对应的权限路由
-     */
-    @Select("select * from menu where manager_id=#{manager_id} and roles=#{roles}")
-    List<Menu> getMenuList(@Param("manager_id") int manager_id, @Param("roles") int roles);
 
     /**
      * 全部消息通知(simple)
@@ -70,9 +63,20 @@ public interface CommonDao {
             "where news.id = #{id}")
     News getNewsDetail(int id);
 
-    @Select("insert into news (school_id, department_id, create_time, state, teacher_id, author, content) " +
-            "values (#{user.school_id}, #{user.department_id}, #{news.create_time}, 1, #{user.identify_id}, #{news.author}, #{news.content})")
+
+    @Select("insert into news (department_id, create_time, state, teacher_id, author, content) " +
+            "values (#{user.department_id}, #{news.create_time}, 0, #{user.identify_id}, #{news.author}, #{news.content})")
     Integer teacherPublishNews(@Param("user") User user, @Param("news") News news);
+
+    /**
+     * 获取用户对应的权限路由
+     */
+    @Select("select id, path, component, icon, father_id, title from menu where department_id=#{department_id} and roles=#{roles} and active=1")
+    @Results(id = "stuList", value = {
+            @Result(property = "meta.title", column = "title"),
+            @Result(property = "meta.icon", column = "icon"),
+    })
+    List<Menu> getMenuList(@Param("department_id") int department_id, @Param("roles") int roles);
 
 }
 
