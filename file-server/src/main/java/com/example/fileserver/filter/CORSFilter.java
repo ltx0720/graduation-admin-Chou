@@ -12,15 +12,16 @@ import java.io.IOException;
 /**
  * @Author ltx
  * @Date 22:57 2020/5/12
- *
- * 全局跨域配置
  */
+/*全局跨域配置*/
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Configuration
 public class CORSFilter implements Filter {
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {}
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest,
