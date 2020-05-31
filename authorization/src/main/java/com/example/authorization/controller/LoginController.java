@@ -34,8 +34,6 @@ public class LoginController {
      */
     @RequestMapping(path = "/publickey", method = RequestMethod.GET)
     public Result getKey() {
-        System.out.println("publickey");
-//        return Result.success("123");
         return Result.success(Base64.encode(publicKey.getBytes()));
     }
 

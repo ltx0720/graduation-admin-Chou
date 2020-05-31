@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
             System.out.println(e.getMessage());
         }
 
-        System.out.println(user);
+//        System.out.println(user);
         return user;
     }
 }

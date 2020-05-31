@@ -101,3 +101,4 @@ public class TokenUtil {
         TokenUtil.alive = alive;
     }
 }
+

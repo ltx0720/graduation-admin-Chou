@@ -1,5 +1,6 @@
 package com.example.authorization.filter;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -18,6 +19,9 @@ import java.io.IOException;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Configuration
 public class CORSFilter implements Filter {
+
+    @Value("${cors.allow.origin}")
+    private String origin;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {}
@@ -38,11 +42,6 @@ public class CORSFilter implements Filter {
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }
-    }
-
-    @Override
-    public void destroy() {
-
     }
 }
 
