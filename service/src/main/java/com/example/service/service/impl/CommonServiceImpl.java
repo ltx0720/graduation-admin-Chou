@@ -86,7 +86,13 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public List<News> getSimpleNewsTeacher(User user) {
-        List<News> newsList = dao.getSimpleNewsTeacher(user.getSchool_id(), user.getDepartment_id(), user.getIdentify_id());
+        List<News> newsList = dao.getSimpleNewsTeacher(user.getDepartment_id(), user.getIdentify_id());
         return newsList;
     }
+
+    @Override
+    public String getNewsContent(int department_id, int id) {
+        return dao.getNewsContent(department_id, id);
+    }
+
 }

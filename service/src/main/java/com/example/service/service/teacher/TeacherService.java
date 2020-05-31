@@ -15,5 +15,5 @@ import java.util.List;
 public interface TeacherService {
     List<Student> getAllStudent(User user);
     List<TeacherApprove> getTeacherApprove(int teacher_id, String type);
-    boolean approveHandle(int id, User user, String state);
+    boolean approveHandle(int id, String opinion, User user, String state);
 }

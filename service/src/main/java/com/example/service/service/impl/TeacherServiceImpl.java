@@ -23,7 +23,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public List<Student> getAllStudent(User user) {
-        return dao.getAllStudent(user.getSchool_id(), user.getDepartment_id(), user.getIdentify_id());
+        return dao.getAllStudent(user.getDepartment_id(), user.getIdentify_id());
     }
 
     @Override
@@ -45,11 +45,11 @@ public class TeacherServiceImpl implements TeacherService {
      * @return boolean
      */
     @Override
-    public boolean approveHandle(int id, User user, String state) {
+    public boolean approveHandle(int id, String opinion, User user, String state) {
         if ("pass".equals(state)) {
-            return dao.approveHandle(id, user.getIdentify_id(), 1) == 1;
+            return dao.approveHandle(id, opinion, user.getIdentify_id(), 1) == 1;
         } else if ("refuse".equals(state)) {
-            return dao.approveHandle(id, user.getIdentify_id(),-1) == 1;
+            return dao.approveHandle(id, opinion, user.getIdentify_id(),-1) == 1;
         }
 
         return false;

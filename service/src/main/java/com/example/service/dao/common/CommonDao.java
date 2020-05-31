@@ -34,11 +34,10 @@ public interface CommonDao {
     /**
      * 全部消息通知(simple)
      */
-    @Select("select news.create_time, news.author, news.title from news where school_id=#{school_id} " +
-            " or state=0 " +
+    @Select("select news.create_time, news.author, news.title from news where state=0 " +
             " or (department_id=#{department_id} and state = 1) " +
             " or (department_id=#{department_id} and teacher_id=#{teacher_id} and state = 2)")
-    List<News> getSimpleNewsTeacher(@Param("school_id") int school_id, @Param("department_id") int department_id, @Param("teacher_id") int teacher_id);
+    List<News> getSimpleNewsTeacher(@Param("department_id") int department_id, @Param("teacher_id") int teacher_id);
 
 
     /**
@@ -62,6 +61,14 @@ public interface CommonDao {
             "on news.id = news_detail.news_id " +
             "where news.id = #{id}")
     News getNewsDetail(int id);
+
+    /**
+     * 获取通知的内容
+     */
+//
+    @Select("select content from news where id=#{id} and (department_id=#{department_id} or department_id=0 )")
+    String getNewsContent(@Param("department_id") int department_id, @Param("id") int id);
+
 
 
     @Select("insert into news (department_id, create_time, state, teacher_id, author, content) " +

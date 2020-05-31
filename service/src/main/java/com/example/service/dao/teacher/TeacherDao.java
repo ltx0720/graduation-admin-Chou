@@ -21,8 +21,8 @@ public interface TeacherDao {
      */
     @Select("select s.class_name, s.name, s.topic_title " +
             "from student s " +
-            "where school_id=#{school_id} and department_id=#{department_id} and teacher_id=#{teacher_id}")
-    List<Student> getAllStudent(@Param("school_id") int school_id, @Param("department_id") int department_id, @Param("teacher_id") long teacher_id);
+            "where department_id=#{department_id} and teacher_id=#{teacher_id}")
+    List<Student> getAllStudent(@Param("department_id") int department_id, @Param("teacher_id") long teacher_id);
 
     /**
      * 待审批条目
@@ -39,6 +39,6 @@ public interface TeacherDao {
     /**
      * 审批条目
      */
-    @Update("update approve_topic set state=#{state} where id=#{id} and teacher_id=#{teacher_id}")
-    Integer approveHandle(@Param("id") int id, @Param("teacher_id") int teacher_id, @Param("state") int state);
+    @Update("update approve_topic set state=#{state}, opinion=#{opinion} where id=#{id} and teacher_id=#{teacher_id}")
+    Integer approveHandle(@Param("id") int id, @Param("opinion") String opinion, @Param("teacher_id") int teacher_id, @Param("state") int state);
 }

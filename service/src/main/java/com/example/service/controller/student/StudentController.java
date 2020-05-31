@@ -38,24 +38,33 @@ public class StudentController {
     /**
      * 获取可供选择的导师列表
      */
-    @RequestMapping(path = "/select_teacher", method = RequestMethod.POST)
+    @RequestMapping(path = "/teacher_select", method = RequestMethod.POST)
     public Result getSelectTeacher(HttpServletRequest request){
-        User user1 = new User((byte) 0);
-        user1.setSchool_id(1);
-        user1.setDepartment_id(1);
+        User user = (User)request.getAttribute("user");
 
-        List<SelectTeacher> selectTeacher = studentService.getSelectTeacher(user1.getSchool_id(), user1.getDepartment_id());
+        List<SelectTeacher> selectTeacher = studentService.getSelectTeacher(user.getDepartment_id());
         return Result.success(200, selectTeacher);
     }
 
     /**
      * 查询是否已选择导师
      */
-    @RequestMapping(path = "/isselected_teacher", method = RequestMethod.POST)
+    @RequestMapping(path = "/is_selected_teacher", method = RequestMethod.POST)
     public Result isSelectedTeacher(HttpServletRequest request){
         User user = (User)request.getAttribute("user");
         boolean isSelected = studentService.isSelectedTeacher(user.getIdentify_id());
         return Result.success(200, isSelected);
+    }
+
+
+    @RequestMapping(path = "/select_teacher", method = RequestMethod.POST)
+    public Result selectTeacher(HttpServletRequest request){
+        System.out.println("select");
+        int teacher_id = Integer.parseInt(request.getParameter("teacher_id"));
+        User user = (User)request.getAttribute("user");
+        boolean resutl = studentService.selectTeacher(user.getIdentify_id(), teacher_id);
+
+        return Result.success(200, resutl);
     }
 
     /**
@@ -72,7 +81,7 @@ public class StudentController {
     /**
      * 是否已选择课题
      */
-    @RequestMapping(path = "/isselected_topic", method = RequestMethod.POST)
+    @RequestMapping(path = "/is_selected_topic", method = RequestMethod.POST)
     public Result isSelectTopic(HttpServletRequest request){
         User user = (User)request.getAttribute("user");
         boolean result = studentService.isSelectedTopic(user.getIdentify_id());

@@ -47,7 +47,6 @@ public class TEST {
     @PostMapping("/upload")
     @ResponseBody
     public String upload( MultipartFile file) {
-        System.out.println("upload file");
         return "上传失败！";
     }
 

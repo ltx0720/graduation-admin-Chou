@@ -25,7 +25,7 @@ public interface StudentService {
     /**
      * 可供选择的导师
      */
-    List<SelectTeacher> getSelectTeacher(int school_id, int department_id);
+    List<SelectTeacher> getSelectTeacher(int department_id);
 
     /**
      * 是否已选择导师

@@ -36,13 +36,9 @@ public class CommonController {
      */
     @RequestMapping(path = "/s_news", method = RequestMethod.POST)
     public Result getMsg(HttpServletRequest request){
-        System.out.println("news");
-//        User user = (User) request.getAttribute("user");
-        User user1 = new User((byte) 0);
-        user1.setSchool_id(1);
-        user1.setDepartment_id(1);
+        User user = (User) request.getAttribute("user");
 
-        List<News> news = commonService.getSimpleNews(user1.getSchool_id(), user1.getDepartment_id());
+        List<News> news = commonService.getSimpleNews(user.getSchool_id(), user.getDepartment_id());
 
         return Result.success(200, news);
     }
@@ -52,12 +48,9 @@ public class CommonController {
      */
     @RequestMapping(path = "/t_news", method = RequestMethod.POST)
     public Result getMsgTeacher(HttpServletRequest request){
-//        User user = (User) request.getAttribute("user");
-        User user1 = new User((byte) 0);
-        user1.setSchool_id(1);
-        user1.setDepartment_id(1);
+        User user = (User) request.getAttribute("user");
 
-        List<News> news = commonService.getSimpleNewsTeacher(user1);
+        List<News> news = commonService.getSimpleNewsTeacher(user);
 
         return Result.success(200, news);
     }
@@ -66,9 +59,9 @@ public class CommonController {
      * 获取通知的详细信息
      */
     @RequestMapping("/news/{news_id}")
-    public Result message(@PathVariable("news_id") int news_id){
-        System.out.println("news_id");
-        return Result.success(200, commonService.getNewsDetail(news_id));
+    public Result message(@PathVariable("news_id") int news_id, HttpServletRequest request){
+        User user = (User) request.getAttribute("user");
+        return Result.success(200, commonService.getNewsContent(user.getDepartment_id(), news_id));
     }
 
 
@@ -96,7 +89,7 @@ public class CommonController {
     @RequestMapping(path = "/menu", method = RequestMethod.POST)
     public Result getMenuList(HttpServletRequest request){
         User user = (User)request.getAttribute("user");
-        System.out.println(user);
+//        System.out.println(user);
         List<Map<String, Object>> menuList =
                 commonService.getMenuList(user.getDepartment_id(), user.getRole());
 

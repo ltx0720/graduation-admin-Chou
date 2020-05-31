@@ -32,15 +32,15 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<SelectTeacher> getSelectTeacher(int school_id, int department_id) {
-        return studentDao.getSelectTeacher(school_id, department_id);
+    public List<SelectTeacher> getSelectTeacher(int department_id) {
+        return studentDao.getSelectTeacher(department_id);
     }
 
     @Override
     public boolean isSelectedTeacher(int student_id) {
-        String teacher_id = studentDao.getSelectedTeacher(student_id);
+        Integer teacher_id = studentDao.getSelectedTeacher(student_id);
 
-        return !(teacher_id == null || "".equals(teacher_id));
+        return !(teacher_id == null || teacher_id == 0);
     }
 
     @Override
@@ -51,8 +51,8 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public boolean selectTeacher(int student_id, int teacher_id) {
         HashMap<String, Object> map = new HashMap<>(3);
-        map.put("student_id", 1);
-        map.put("teacher_id", 1);
+        map.put("student_id", student_id);
+        map.put("teacher_id", teacher_id);
         map.put("result", true);
         studentDao.seletTeacher(map);
 

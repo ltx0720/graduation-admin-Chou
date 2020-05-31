@@ -27,17 +27,11 @@ public class TeacherController {
 
     @RequestMapping(path = "/student", method = RequestMethod.POST)
     public Result getStudent(HttpServletRequest request){
-        User user1 = new User((byte) 0);
-        user1.setSchool_id(1);
-        user1.setDepartment_id(1);
-        user1.setIdentify_id(1);
-
-//        User user = (User) request.getAttribute("user");
-        List<Student> studentList = teacherService.getAllStudent(user1);
+        User user = (User) request.getAttribute("user");
+        List<Student> studentList = teacherService.getAllStudent(user);
 
         return Result.success(200, studentList);
     }
-
 
     /**
      * 导师获取待审批条目
@@ -49,22 +43,17 @@ public class TeacherController {
     }
 
     /**
-     * 导师审批申请。批准/拒绝
+     * 导师审批申请，批准/拒绝
      */
     @RequestMapping(path = "/approve/{action}", method = RequestMethod.POST)
     public Result approve(HttpServletRequest request, @PathVariable("action") String action){
-//        User user = (User)request.getAttribute("user");
+        User user = (User)request.getAttribute("user");
 
-        User user = new User();
-        user.setIdentify_id(1);
         Integer id = Integer.valueOf(request.getParameter("id"));
+        String opinion = request.getParameter("opinion");
 
-        boolean b = teacherService.approveHandle(id, user, action);
+        boolean b = teacherService.approveHandle(id, opinion, user, action);
 
-        if (b){
-            return Result.success(200, "success");
-        }
-
-        return Result.error(400, "fail");
+        return Result.success(200, b);
     }
 }

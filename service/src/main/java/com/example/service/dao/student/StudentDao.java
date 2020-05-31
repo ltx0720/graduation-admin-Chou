@@ -24,22 +24,23 @@ public interface StudentDao {
             " on s.id=#{student_id} " +
             " where n.state=0 " +
             " or (n.department_id=s.department_id and n.state=1) " +
-            " or (n.department_id=s.department_id and n.teacher_id=s.teacher_id and n.state=2)")
+            " or (n.department_id=s.department_id and n.teacher_id=s.teacher_id and n.state=2)" +
+            " order by n.create_time desc")
     List<News> getSimpleNews(int student_id);
 
     /**
      * 可供选择的导师
      */
-    @Select("select t.information, t.name as teacher_name, t.major, st.num from select_teacher st right join teacher t " +
+    @Select("select t.id as teacher_id, t.information, t.name as teacher_name, t.major, st.num from select_teacher st right join teacher t " +
             "on st.teacher_id = t.id " +
-            "where st.school_id=#{school_id} and st.department_id=#{department_id} ")
-    List<SelectTeacher> getSelectTeacher(@Param("school_id") int school_id, @Param("department_id")int department_id);
+            "where st.department_id=#{department_id} ")
+    List<SelectTeacher> getSelectTeacher(@Param("department_id")int department_id);
 
     /**
      * 获取已选择的导师
      */
     @Select("select teacher_id from student where id=#{student_id}")
-    String getSelectedTeacher(int student_id);
+    Integer getSelectedTeacher(int student_id);
 
     /**
      * 选择导师

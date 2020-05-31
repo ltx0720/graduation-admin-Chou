@@ -25,4 +25,6 @@ public interface CommonService {
     Integer teacherPublishNews(User user, News news);
 
     List<News> getSimpleNewsTeacher(User user);
+
+    String getNewsContent(int department_id, int id);
 }
